@@ -1,41 +1,28 @@
 require('dotenv').config();
-
 const express = require('express');
+const { sequelize } = require('./models'); 
 
-const { sequelize } = require('./models'); // Importa la conexión de Sequelize
-
-
+// Importar rutas (Solo deben estar declaradas una vez)
+const equiposRoutes = require('./routes/equipos.routes');
+const prestamosRoutes = require('./routes/prestamos.routes');
 
 const app = express();
-
 const PORT = process.env.PORT || 3000;
 
+app.use(express.json()); 
 
+// Definir los endpoints base de la API
+app.use('/api/equipos', equiposRoutes);
+app.use('/api/prestamos', prestamosRoutes);
 
-// Middlewares básicos
-
-app.use(express.json()); // Permite a la API entender formato JSON
-
-
-
-// Prueba de conexión a la Base de Datos y arranque del servidor
+// ... (Aquí continúa tu app.listen)
 
 app.listen(PORT, async () => {
-
- console.log(`Servidor corriendo en http://localhost:${PORT}`);
-
- try {
-
-  // Autenticamos que Sequelize logre conectar con MySQL
-
-  await sequelize.authenticate();
-
-  console.log('Conexión a la base de datos MySQL establecida con éxito.');
-
- } catch (error) {
-
-  console.error('Error al conectar con la base de datos:', error);
-
- }
-
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  try {
+    await sequelize.authenticate();
+    console.log('Conexión a la base de datos MySQL establecida con éxito.');
+  } catch (error) {
+    console.error('Error al conectar con la base de datos:', error);
+  }
 });
