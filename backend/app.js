@@ -1,6 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const { sequelize } = require('./models'); 
+// Importar rutas (agrégalo debajo de las otras)
+const authRoutes = require('./routes/auth.routes');
 
 // Importar rutas (Solo deben estar declaradas una vez)
 const equiposRoutes = require('./routes/equipos.routes');
@@ -14,7 +16,7 @@ app.use(express.json());
 // Definir los endpoints base de la API
 app.use('/api/equipos', equiposRoutes);
 app.use('/api/prestamos', prestamosRoutes);
-
+app.use('/api/auth', authRoutes);
 // ... (Aquí continúa tu app.listen)
 
 app.listen(PORT, async () => {

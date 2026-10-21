@@ -3,11 +3,15 @@ const router = express.Router();
 const prestamosController = require('../controllers/prestamos.controller');
 const { validarPrestamo } = require('../middlewares/prestamos.middleware');
 
+// Importamos el nuevo candado
+const { verificarToken } = require('../middlewares/auth.middleware');
+
 router.get('/', prestamosController.listarPrestamos);
 
-// Se añade el middleware "validarPrestamo" como paso intermedio
-router.post('/', validarPrestamo, prestamosController.crearPrestamo);
+// Agregamos verificarToken como primer paso antes de validarPrestamo
+router.post('/', verificarToken, validarPrestamo, prestamosController.crearPrestamo);
 
-router.put('/:id/devolucion', prestamosController.devolverPrestamo);
+// Agregamos verificarToken antes de procesar la devolución
+router.put('/:id/devolucion', verificarToken, prestamosController.devolverPrestamo);
 
 module.exports = router;
